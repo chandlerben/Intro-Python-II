@@ -1,4 +1,6 @@
 from room import Room
+from player import Player
+from item import Item
 
 # Declare all the rooms
 
@@ -33,6 +35,14 @@ room['narrow'].w_to = room['foyer']
 room['narrow'].n_to = room['treasure']
 room['treasure'].s_to = room['narrow']
 
+
+rock = Item("Rock", "This is a rock.")
+
+room['outside'].items.append(rock)
+
+
+player = Player("Steve", room['outside'])
+
 #
 # Main
 #
@@ -49,3 +59,29 @@ room['treasure'].s_to = room['narrow']
 # Print an error message if the movement isn't allowed.
 #
 # If the user enters "q", quit the game.
+
+
+def print_room(room):
+    print(f"\n-----------------------------------")
+    print(f"\n\n{room.title}")
+    print(f"\n{room.description}\n")
+
+
+current_room = player.current_room
+
+print_room(current_room)
+
+valid_directions = ["n", "s", "e", "w"]
+
+while True:
+    current_room = player.current_room
+    cmd = input("-> ")
+    if cmd in valid_directions:
+        player.travel(cmd)
+
+    elif cmd == "q":
+        print("See you next time!")
+        exit()
+
+    else:
+        print("I did not recognize that command.")
