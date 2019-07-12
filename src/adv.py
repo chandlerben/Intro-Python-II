@@ -6,21 +6,21 @@ from item import Item
 
 room = {
     'outside':  Room("Outside Cave Entrance",
-                     "North of you, the cave mount beckons"),
+                     "North of you, the cave mount beckons", []),
 
     'foyer':    Room("Foyer", """Dim light filters in from the south. Dusty
-passages run north and east."""),
+passages run north and east.""", []),
 
     'overlook': Room("Grand Overlook", """A steep cliff appears before you, falling
 into the darkness. Ahead to the north, a light flickers in
-the distance, but there is no way across the chasm."""),
+the distance, but there is no way across the chasm.""", []),
 
     'narrow':   Room("Narrow Passage", """The narrow passage bends here from west
-to north. The smell of gold permeates the air."""),
+to north. The smell of gold permeates the air.""", []),
 
     'treasure': Room("Treasure Chamber", """You've found the long-lost treasure
 chamber! Sadly, it has already been completely emptied by
-earlier adventurers. The only exit is to the south."""),
+earlier adventurers. The only exit is to the south.""", []),
 }
 
 
@@ -36,9 +36,14 @@ room['narrow'].n_to = room['treasure']
 room['treasure'].s_to = room['narrow']
 
 
-rock = Item("Rock", "This is a rock.")
+pointy_rock = Item("Pointy_Rock", "This is a rock that is pointer than most.")
+pencil = Item("Pencil", "It's #2.  It's #2.")
+less_pointy_rock = Item(
+    "Less_Pointy_Rock", "This is a rock that is less pointy than some.")
 
-room['outside'].items.append(rock)
+room['outside'].items.append(pencil)
+room['outside'].items.append(pointy_rock)
+room['outside'].items.append(less_pointy_rock)
 
 
 player = Player("Steve", room['outside'])
@@ -61,24 +66,31 @@ player = Player("Steve", room['outside'])
 # If the user enters "q", quit the game.
 
 
-def print_room(room):
-    print(f"\n-----------------------------------")
-    print(f"\n\n{room.title}")
-    print(f"\n{room.description}\n")
-
-
 current_room = player.current_room
 
-print_room(current_room)
+print(current_room)
 
 valid_directions = ["n", "s", "e", "w"]
+valid_commands = ["get"]
+valid_verbs = ["get", "talk", "attack"]
 
 while True:
     current_room = player.current_room
     cmd = input("-> ")
     if cmd in valid_directions:
         player.travel(cmd)
+    elif len(cmd) > 1:
+        verb, direct_object = cmd.split()
+        if verb in valid_verbs:
+            if verb == "get":
+                player.current_room.get_item_string(direct_object)
+                if player.current_room.get_item_string(direct_object) == True:
+                    player.put_item_in_pocket(direct_object)
+                else:
+                    print('That item is not in the room')
 
+    elif cmd == "i":
+        player._print_inventory()
     elif cmd == "q":
         print("See you next time!")
         exit()
