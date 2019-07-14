@@ -36,17 +36,7 @@ room['narrow'].n_to = room['treasure']
 room['treasure'].s_to = room['narrow']
 
 
-pointy_rock = Item("Pointy_Rock", "This is a rock that is pointer than most.")
-pencil = Item("Pencil", "It's #2.  It's #2.")
-less_pointy_rock = Item(
-    "Less_Pointy_Rock", "This is a rock that is less pointy than some.")
-
-room['outside'].items.append(pencil)
-room['outside'].items.append(pointy_rock)
-room['outside'].items.append(less_pointy_rock)
-
-
-player = Player("Steve", room['outside'])
+player = Player("Steve", room['outside'], [])
 
 #
 # Main
@@ -79,15 +69,6 @@ while True:
     cmd = input("-> ")
     if cmd in valid_directions:
         player.travel(cmd)
-    elif len(cmd) > 1:
-        verb, direct_object = cmd.split()
-        if verb in valid_verbs:
-            if verb == "get":
-                player.current_room.get_item_string(direct_object)
-                if player.current_room.get_item_string(direct_object) == True:
-                    player.put_item_in_pocket(direct_object)
-                else:
-                    print('That item is not in the room')
 
     elif cmd == "i":
         player._print_inventory()

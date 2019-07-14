@@ -3,10 +3,10 @@
 
 
 class Player:
-    def __init__(self, name, starting_room):
+    def __init__(self, name, starting_room, inventory):
         self.name = name
         self.current_room = starting_room
-        self.items = []
+        self.inventory = []
 
     def travel(self, direction):
         # Check if there is a valid room in the direction
@@ -19,14 +19,9 @@ class Player:
             # Else, print error message
             print("Sorry!  There is no room here.", "\n")
 
-    def put_item_in_pocket(self, item):
-        print("You have activated Player Get Item function")
-        self.items.append(item)
-        print(f"You picked up {item}")
-
     def _print_inventory(self):
-        if len(self.items) > 0:
+        if len(self.inventory) > 0:
             print("\nYou are carrying:\n   " +
-                  ", ".join([item.name for item in self.items]) + "\n")
+                  ", ".join([item.name for item in self.inventory]) + "\n")
         else:
             print("You are carrying nothing.  Find some stuff to pick up!")
